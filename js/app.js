@@ -72,7 +72,7 @@ function createArticleCard(article) {
                 
                 <div class="article-tags">
                     ${article.tags
-                      .map((tag) => `<span class="tag">${tag}</span>`)
+                      .map((tag) => `<span class="tag" data-tag="${tag}">${tag}</span>`)
                       .join("")}
                 </div>
             </div>
@@ -116,6 +116,137 @@ function renderAllArticles(articlesData) {
   });
 }
 
+// Переменные для управления фильтрацией
+let activeFilter = null;
+let allTags = [];
+let currentArticlesData = null; // Для хранения загруженных данных
+
+// Функция для получения всех уникальных тегов из статей
+function getAllUniqueTags(articles) {
+    const tags = new Set();
+    
+    articles.forEach(article => {
+        article.tags.forEach(tag => {
+            tags.add(tag);
+        });
+    });
+    
+    return Array.from(tags).sort();
+}
+
+// Функция для отображения фильтров по тегам
+function renderTagFilters(articles) {
+    const tagsContainer = document.getElementById('tagsContainer');
+    if (!tagsContainer) return;
+    
+    allTags = getAllUniqueTags(articles);
+    
+    let tagsHTML = '<button class="tag-filter all-tags active" data-tag="all">Все статьи</button>';
+    
+    allTags.forEach(tag => {
+        tagsHTML += `<button class="tag-filter" data-tag="${tag}">${tag}</button>`;
+    });
+    
+    tagsContainer.innerHTML = tagsHTML;
+    
+    // Добавляем обработчики кликов на кнопки тегов
+    document.querySelectorAll('.tag-filter').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const selectedTag = this.getAttribute('data-tag');
+            filterByTag(selectedTag);
+        });
+    });
+}
+
+// Функция для фильтрации статей по тегу
+function filterByTag(tag) {
+    if (!currentArticlesData) return;
+    
+    activeFilter = tag === 'all' ? null : tag;
+    
+    // Обновляем активные кнопки фильтров
+    document.querySelectorAll('.tag-filter').forEach(btn => {
+        const btnTag = btn.getAttribute('data-tag');
+        if ((tag === 'all' && btnTag === 'all') || btnTag === tag) {
+            btn.classList.add('active');
+        } else {
+            btn.classList.remove('active');
+        }
+    });
+    
+    // Отображаем информацию об активном фильтре
+    const filterInfo = document.getElementById('activeFilterInfo');
+    const activeTagName = document.getElementById('activeTagName');
+    
+    if (activeFilter) {
+        if (filterInfo) {
+            filterInfo.style.display = 'flex';
+            activeTagName.textContent = tag;
+        }
+    } else {
+        if (filterInfo) {
+            filterInfo.style.display = 'none';
+        }
+    }
+    
+    // Отображаем статьи
+    renderFilteredArticles();
+}
+
+// Функция для сброса фильтра
+function clearFilter() {
+    filterByTag('all');
+}
+
+// Функция для отображения отфильтрованных статей
+function renderFilteredArticles() {
+    if (!currentArticlesData) return;
+    
+    const container = document.getElementById('articlesContainer');
+    if (!container) return;
+    
+    container.innerHTML = '';
+    
+    let filteredArticles = currentArticlesData.articles;
+    
+    if (activeFilter) {
+        filteredArticles = currentArticlesData.articles.filter(article => 
+            article.tags.includes(activeFilter)
+        );
+    }
+    
+    if (filteredArticles.length === 0) {
+        container.innerHTML = `
+            <div class="no-articles-message">
+                <h3>Статьи не найдены</h3>
+                <p>Нет статей с тегом "${activeFilter}"</p>
+                <button class="clear-filter-btn" onclick="clearFilter()" style="margin-top: 10px;">Показать все статьи</button>
+            </div>
+        `;
+        return;
+    }
+    
+    filteredArticles.forEach(article => {
+        container.innerHTML += createArticleCard(article);
+    });
+    
+    // Добавляем обработчики событий для кнопок "показать еще"
+    document.querySelectorAll('.show-more-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const articleId = this.getAttribute('data-id');
+            handleShowMoreClick(articleId);
+        });
+    });
+    
+    // Добавляем обработчики кликов на теги в карточках статей
+    document.querySelectorAll('.article-tags .tag').forEach(tagElement => {
+        tagElement.addEventListener('click', function() {
+            const tag = this.getAttribute('data-tag');
+            filterByTag(tag);
+        });
+    });
+}
+
 // Функция для загрузки данных из JSON файла
 async function loadArticlesData() {
   try {
@@ -128,19 +259,22 @@ async function loadArticlesData() {
     }
 
     const articlesData = await response.json();
+    currentArticlesData = articlesData; // Сохраняем данные
     return articlesData;
   } catch (error) {
     console.error("Ошибка при загрузке данных:", error);
 
     // Показываем сообщение об ошибке
     const container = document.getElementById("articlesContainer");
-    container.innerHTML = `
-            <div style="text-align: center; padding: 40px; color: #ff4444;">
-                <h3>Ошибка загрузки данных</h3>
-                <p>${error.message}</p>
-                <p>Проверьте наличие файла articles.json в папке с проектом.</p>
-            </div>
-        `;
+    if (container) {
+      container.innerHTML = `
+        <div style="text-align: center; padding: 40px; color: #ff4444;">
+          <h3>Ошибка загрузки данных</h3>
+          <p>${error.message}</p>
+          <p>Проверьте наличие файла articles.json в папке с проектом.</p>
+        </div>
+      `;
+    }
 
     return null;
   }
@@ -151,10 +285,21 @@ document.addEventListener("DOMContentLoaded", async () => {
   const articlesData = await loadArticlesData();
 
   if (articlesData) {
-    renderAllArticles(articlesData);
+    // Проверяем, есть ли контейнер для тегов (значит, это страница со статьями с фильтрацией)
+    const tagsContainer = document.getElementById('tagsContainer');
+    if (tagsContainer) {
+      // Отрисовываем фильтры по тегам
+      renderTagFilters(articlesData.articles);
+      // Отрисовываем статьи с учетом фильтра (изначально активный фильтр - null, т.е. все)
+      renderFilteredArticles();
+    } else {
+      // Иначе просто отрисовываем все статьи (без фильтров)
+      renderAllArticles(articlesData);
+    }
   }
 });
 
+// FAQ функционал (для других страниц)
 document.querySelectorAll(".question").forEach((question) => {
   question.addEventListener("click", () => {
     const answer = question.nextElementSibling; // Получаем следующий элемент (ответ)
@@ -166,4 +311,12 @@ document.querySelectorAll(".question").forEach((question) => {
       question.classList.add("active"); // Добавляем класс активности
     }
   });
+});
+
+// Добавляем обработчик для кнопки сброса фильтра
+document.addEventListener('DOMContentLoaded', function() {
+  const clearFilterBtn = document.querySelector('.clear-filter-btn');
+  if (clearFilterBtn) {
+    clearFilterBtn.addEventListener('click', clearFilter);
+  }
 });
