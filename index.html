@@ -52,7 +52,7 @@
     <div class="tm-header">
       <div class="container-fluid">
         <div class="tm-header-inner">
-          <a href="#" class="navbar-brand tm-site-name">Название</a>
+          <a href="index.html" class="navbar-brand tm-site-name">Название</a>
 
           <!-- navbar -->
           <nav class="navbar tm-main-nav">
@@ -75,7 +75,7 @@
                   <a href="Om_oss.html" class="nav-link">Om oss</a>
                 </li>
                 <li class="nav-item">
-                  <a href="För_föräldrar.html" class="nav-link"
+                  <a href="For_foraldrar.html" class="nav-link"
                     >För föräldrar</a
                   >
                 </li>
@@ -96,93 +96,75 @@
 
     <section class="tm-section">
       <div class="container-fluid">
-        <!-- <div class="hero__inner">
-          <div class="hero__content">
-            <h1 class="hero__title">Название</h1>
-            <p class="hero__text">
-              Lorem ipsum dolor, sit amet consectetur adipisicing elit. Alias eum, in repellendus blanditiis eos esse suscipit tempora. Ut libero iure, culpa sunt suscipit animi reiciendis minus quibusdam voluptate omnis quam?
-            </p>
-            
+        <div class="nem-wrapper">
+          <div class="hero__inner">
+            <div class="hero__img">
+              <img src="/img/tm-home-img.jpg" alt="" />
+            </div>
+            <div class="hero__content">
+              <h1 class="hero__title">Название</h1>
+              <p class="hero__text">
+                Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ut
+                asperiores nam fugit voluptatum minus. Reiciendis deleniti ex
+                libero corrupti, beatae expedita commodi voluptas eius in
+                laudantium voluptate quisquam temporibus doloribus ad
+                reprehenderit consequatur repellat maiores vel numquam? Quod
+                asperiores porro molestiae quo consequuntur autem voluptate.
+                Numquam blanditiis amet at distinctio?
+              </p>
+            </div>
           </div>
-          <div class="hero__testimonials">
-            
+          <div class="tags-filter">
+            <div class="tags-container" id="tagsContainer">
+              <!-- Теги будут вставлены здесь -->
+            </div>
           </div>
+          <div
+            id="activeFilterInfo"
+            class="active-filter-info"
+            style="display: none"
+          >
+            <span
+              >Показаны статьи с тегом: <strong id="activeTagName"></strong
+            ></span>
+            <button class="clear-filter-btn" onclick="clearFilter()">
+              Сбросить фильтр
+            </button>
+          </div>
+          <div id="articlesContainer" class="articles-container"></div>
         </div>
-        <div class="rules-container">
-          <h2 class="hero__rules-title">Правила</h2>
-          <ol class="rules-list">
-        <li class="rule-item" >
-            <div class="rule-number">1</div>
-            <div class="rule-content">
-                <h3 class="rule-title">Lorem, ipsum dolor.</h3>
-                <p class="rule-text">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Earum at explicabo quam quos sit sunt sapiente possimus illum vero temporibus iure facere, modi excepturi est blanditiis corrupti, odio beatae necessitatibus?</p>
-            </div>
-        </li>
-        <li class="rule-item" >
-            <div class="rule-number">2</div>
-            <div class="rule-content">
-                <h3 class="rule-title">Lorem, ipsum dolor.</h3>
-                <p class="rule-text">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Earum at explicabo quam quos sit sunt sapiente possimus illum vero temporibus iure facere, modi excepturi est blanditiis corrupti, odio beatae necessitatibus?</p>
-            </div>
-        </li>
-        <li class="rule-item" >
-            <div class="rule-number">3</div>
-            <div class="rule-content">
-                <h3 class="rule-title">Lorem, ipsum dolor.</h3>
-                <p class="rule-text">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Earum at explicabo quam quos sit sunt sapiente possimus illum vero temporibus iure facere, modi excepturi est blanditiis corrupti, odio beatae necessitatibus?</p>
-            </div>
-        </li>
-        <li class="rule-item" >
-            <div class="rule-number">4</div>
-            <div class="rule-content">
-                <h3 class="rule-title">Lorem, ipsum dolor.</h3>
-                <p class="rule-text">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Earum at explicabo quam quos sit sunt sapiente possimus illum vero temporibus iure facere, modi excepturi est blanditiis corrupti, odio beatae necessitatibus?</p>
-            </div>
-        </li>
-        <li class="rule-item" >
-            <div class="rule-number">5</div>
-            <div class="rule-content">
-                <h3 class="rule-title">Lorem, ipsum dolor.</h3>
-                <p class="rule-text">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Earum at explicabo quam quos sit sunt sapiente possimus illum vero temporibus iure facere, modi excepturi est blanditiis corrupti, odio beatae necessitatibus?</p>
-            </div>
-        </li>
-          </ol>
-        </div> -->
-        <div id="articlesContainer" class="articles-container"></div>
       </div>
     </section>
 
     <footer class="footer" id="footer">
-        <div class="container">
-          <div class="footer__body">
-            <div class="footer__col">
-              <a class="footer__logo logo" href="#">
-                <img src="img/favicon/favicon-512.png" width="50" alt="Логотип" />
-              </a>
-              <p class="footer__text">
-                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Vitae, maxime?
-              </p>
-            </div>
-            
-            
-            <div class="footer__col">
-              <h6 class="footer__title">Kontakta oss</h6>
-              <ul class="footer__list">
-                <li class="footer__item">
-                  <a class="footer__link" href="tel:+7">+79876543210</a></li>
-                <li class="footer__item">
-                  <a class="footer__link" href="mailto:@mail.ru">
-                    @mail.ru</a
-                  >
-                </li>
-              </ul>
-            </div>
+      <div class="container">
+        <div class="footer__body">
+          <div class="footer__col">
+            <a class="footer__logo logo" href="#">
+              <img src="img/favicon/favicon-512.png" width="50" alt="Логотип" />
+            </a>
+            <p class="footer__text">
+              Lorem ipsum, dolor sit amet consectetur adipisicing elit. Vitae,
+              maxime?
+            </p>
           </div>
-          <div class="footer__bottom">
-            <div class="footer__copy">Lorem ipsum dolor sit.</div>
-            
+
+          <div class="footer__col">
+            <h6 class="footer__title">Kontakta oss</h6>
+            <ul class="footer__list">
+              <li class="footer__item">
+                <a class="footer__link" href="tel:+7">+79876543210</a>
+              </li>
+              <li class="footer__item">
+                <a class="footer__link" href="mailto:@mail.ru"> @mail.ru</a>
+              </li>
+            </ul>
           </div>
         </div>
+        <div class="footer__bottom">
+          <div class="footer__copy">Lorem ipsum dolor sit.</div>
+        </div>
+      </div>
     </footer>
 
     <!-- load JS files -->
@@ -195,3 +177,5 @@
     <script src="js/app.js"></script>
   </body>
 </html>
+
+
